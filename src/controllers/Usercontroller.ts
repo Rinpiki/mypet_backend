@@ -84,6 +84,22 @@ class UserController {
       res.status(500).json({ error: "error ao editar o usuario" });
     }
   }
+
+  async deletuser(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const deletedUser = await prisma.user.delete({
+        where: {
+          id: id,
+        },
+      });
+      res
+        .status(200)
+        .json({ message: "User deleted successfully", user: deletedUser });
+    } catch (error) {
+      response.status(500).json({ error: "error ao deletar usuario" });
+    }
+  }
 }
 
 export default new UserController();
