@@ -1,4 +1,4 @@
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -44,7 +44,7 @@ class UserController {
       });
       res.status(201).json(user);
     } catch (error) {
-      response.status(500).json({ error: "error ao criar usuario" });
+      res.status(500).json({ error: "error ao criar usuario" });
     }
   }
 
@@ -97,7 +97,7 @@ class UserController {
         .status(200)
         .json({ message: "User deleted successfully", user: deletedUser });
     } catch (error) {
-      response.status(500).json({ error: "error ao deletar usuario" });
+      res.status(500).json({ error: "error ao deletar usuario" });
     }
   }
 }

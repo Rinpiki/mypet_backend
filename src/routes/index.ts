@@ -1,11 +1,11 @@
 import { Router } from "express";
-import Usercontroller from "../controllers/Usercontroller";
+import userRoutes from "./userRoutes";
+import petRoutes from "./petRoutes";
 
 const router = Router();
 
-router.get("/users", Usercontroller.findUser);
-router.post("/user", Usercontroller.createUser);
-router.put("/user/:id", Usercontroller.editUser);
-router.delete("/user/:id", Usercontroller.deletuser);
+// Usando as rotas separadas
+router.use(userRoutes);
+router.use(petRoutes);
 
 export default router;
