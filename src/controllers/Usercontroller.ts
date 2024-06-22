@@ -8,7 +8,7 @@ class UserController {
       const users = await prisma.user.findMany();
       res.status(201).json(users);
     } catch (error) {
-      res.status(400).json({ error: "nao foi possivel encontrar os usuarios" });
+      res.status(400).json({ error: "Unable to find users" });
     }
   }
 
@@ -16,13 +16,13 @@ class UserController {
     const { name, email, password } = req.body;
     //verificar se o email esta no campo
     if (!email) {
-      return res.status(400).json({ error: "Email é necessário" });
+      return res.status(400).json({ error: "Email is required" });
     }
 
     //verificar se o email é valido
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Email é invalido" });
+      return res.status(400).json({ error: "Email is invalid" });
     }
 
     try {
@@ -44,7 +44,7 @@ class UserController {
       });
       res.status(201).json(user);
     } catch (error) {
-      res.status(500).json({ error: "error ao criar usuario" });
+      res.status(500).json({ error: "error when creating user" });
     }
   }
 
@@ -81,7 +81,7 @@ class UserController {
         res.status(200).json(editedUser);
       }
     } catch (error) {
-      res.status(500).json({ error: "error ao editar o usuario" });
+      res.status(500).json({ error: "error when editing user" });
     }
   }
 
@@ -97,7 +97,7 @@ class UserController {
         .status(200)
         .json({ message: "User deleted successfully", user: deletedUser });
     } catch (error) {
-      res.status(500).json({ error: "error ao deletar usuario" });
+      res.status(500).json({ error: "error when deleting user" });
     }
   }
 }
