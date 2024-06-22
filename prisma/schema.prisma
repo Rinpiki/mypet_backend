@@ -26,7 +26,7 @@ model Pets {
   tutor       String
   location    String
   description String
-  contact     Contact[]
+  contact     Contact[] 
   userId      String
   author      User    @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
@@ -41,7 +41,7 @@ model Contact {
   facebook  String?
   x         String?
   petId     String
-  author    Pets    @relation(fields: [petId], references: [id])
+ author    Pets    @relation(fields: [petId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }

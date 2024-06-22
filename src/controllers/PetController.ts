@@ -93,6 +93,21 @@ class PetController {
       res.status(500).json({ error: "Error updating pet" });
     }
   }
+
+  async deletPet(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const deletedPet = await prisma.pets.delete({
+        where: { id },
+      });
+      res
+        .status(200)
+        .json({ message: "Pet deleted successfully", pet: deletedPet });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "error when deleting Pet" });
+    }
+  }
 }
 
 export default new PetController();

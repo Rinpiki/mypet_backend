@@ -7,5 +7,6 @@ const router = Router();
 router.get("/pets", PetController.findPet);
 router.post("/pet", PetController.createPet);
 router.put("/pet/:id", PetController.updatedPet);
+router.delete("/pet/:id", PetController.deletPet);
 
 export default router;

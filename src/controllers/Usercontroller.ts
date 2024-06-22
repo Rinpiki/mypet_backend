@@ -85,7 +85,7 @@ class UserController {
     }
   }
 
-  async deletuser(req: Request, res: Response) {
+  async deletUser(req: Request, res: Response) {
     const { id } = req.params;
     try {
       const deletedUser = await prisma.user.delete({
