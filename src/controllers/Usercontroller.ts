@@ -1,103 +1,78 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import userService from "../services/userService";
+import useSchema from "../joiSchema/useSchema";
 
 class UserController {
   async findUser(req: Request, res: Response) {
     try {
-      const users = await prisma.user.findMany();
-      res.status(201).json(users);
+      const users = await userService.findUsers();
+      res.status(200).json(users);
     } catch (error) {
-      res.status(400).json({ error: "Unable to find users" });
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
     }
   }
 
   async createUser(req: Request, res: Response) {
-    const { name, email, password } = req.body;
-    //verificar se o email esta no campo
-    if (!email) {
-      return res.status(400).json({ error: "Email is required" });
+    const { error, value } = useSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
     }
 
-    //verificar se o email é valido
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Email is invalid" });
-    }
+    const { name, email, password } = value;
 
     try {
-      //verificar se o email já esta cadastrado
-      const existingUser = await prisma.user.findUnique({
-        where: { email },
-      });
-      if (existingUser) {
-        return res.status(400).json({ error: "Email already is use" });
-      }
-
-      //criar novo usuário
-      const user = await prisma.user.create({
-        data: {
-          name: name,
-          email: email,
-          password: password,
-        },
-      });
+      const user = await userService.createUser({ name, email, password });
       res.status(201).json(user);
     } catch (error) {
-      res.status(500).json({ error: "error when creating user" });
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
     }
   }
 
   async editUser(req: Request, res: Response) {
+    const { error, value } = useSchema.validate(req.body);
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { name, email, password } = value;
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
     try {
-      const existingUser = await prisma.user.findUnique({
-        where: { id },
+      const editedUser = await userService.editUser(id, {
+        name,
+        email,
+        password,
       });
-
-      // Verificar se o email já está em uso por outro usuário
-      if (email) {
-        const emailInUse = await prisma.user.findUnique({
-          where: { email },
-        });
-
-        if (emailInUse && emailInUse.id !== id) {
-          return res.status(400).json({ error: "Email already in use" });
-        }
-      }
-
-      if (existingUser) {
-        const editedUser = await prisma.user.update({
-          where: {
-            id: id,
-          },
-          data: {
-            name: name,
-            email: email,
-            password: password,
-          },
-        });
-        res.status(200).json(editedUser);
-      }
+      res.status(200).json(editedUser);
     } catch (error) {
-      res.status(500).json({ error: "error when editing user" });
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
     }
   }
 
-  async deletUser(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response) {
     const { id } = req.params;
     try {
-      const deletedUser = await prisma.user.delete({
-        where: {
-          id: id,
-        },
-      });
-      res
-        .status(200)
-        .json({ message: "User deleted successfully", user: deletedUser });
+      await userService.deleteUser(id);
+      res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
-      res.status(500).json({ error: "error when deleting user" });
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
     }
   }
 }
