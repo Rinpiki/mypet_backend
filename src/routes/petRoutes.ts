@@ -5,6 +5,7 @@ const router = Router();
 
 // Rotas de pets
 router.get("/pets", PetController.findPet);
+router.get("/pet/:id", PetController.findPetById);
 router.post("/pet", PetController.createPet);
 router.put("/pet/:id", PetController.updatedPet);
 router.delete("/pet/:id", PetController.deletPet);
