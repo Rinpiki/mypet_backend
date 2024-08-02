@@ -20,3 +20,21 @@ export interface PetInterface {
   userId: string;
   contact: ContactInterface[];
 }
+
+export interface CreatePet {
+  id: string;
+  name: string;
+  age: number;
+  breed: string;
+  sex: string;
+  tutor: string;
+  location: string;
+  description: string;
+  userId: string;
+  createdAt: Date;
+  updateAt: Date;
+}
+
+export interface UpdatePet extends CreatePet {}
+export interface AllPets extends CreatePet {}
+export interface DeletePet extends CreatePet {}

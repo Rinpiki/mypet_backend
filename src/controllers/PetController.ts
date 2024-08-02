@@ -13,7 +13,7 @@ class PetController {
     }
   }
 
-  async findPetById(req: Request, res: Response): Promise<void> {
+  async findPetById(req: Request, res: Response) {
     const { id } = req.params;
     try {
       const pet = await petService.findPetById(id);
@@ -31,15 +31,12 @@ class PetController {
 
   async createPet(req: Request, res: Response) {
     const { error, value } = petSchema.validate(req.body);
-
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
     try {
-      // Cria o pet relacionado ao usuário
       const newPet = await petService.createPet(value);
-
       res.status(201).json(newPet);
     } catch (error) {
       console.error(error);
@@ -77,7 +74,6 @@ class PetController {
         .status(200)
         .json({ message: "Pet deleted successfully", pet: deletedPet });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ error: "Id not found" });
     }
   }

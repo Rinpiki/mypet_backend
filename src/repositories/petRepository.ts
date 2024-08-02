@@ -1,10 +1,17 @@
-import { PrismaClient, Pets, Prisma } from "@prisma/client";
-import { PetInterface, ContactInterface } from "../types/index";
+import { PrismaClient, Prisma } from "@prisma/client";
+import {
+  PetInterface,
+  ContactInterface,
+  DeletePet,
+  UpdatePet,
+  CreatePet,
+  AllPets,
+} from "../types/index";
 
 const prisma = new PrismaClient();
 
 class PetRepository {
-  async findAll() {
+  async findAll(): Promise<AllPets[]> {
     return await prisma.pets.findMany();
   }
   async findById(id: string): Promise<PetInterface | null> {
@@ -15,7 +22,7 @@ class PetRepository {
       },
     });
   }
-  async create(data: any): Promise<Pets> {
+  async create(data: any): Promise<CreatePet> {
     return await prisma.pets.create({
       data: {
         ...data,
@@ -27,7 +34,7 @@ class PetRepository {
       },
     });
   }
-  async update(data: PetInterface, id: string): Promise<Pets> {
+  async update(data: PetInterface, id: string): Promise<UpdatePet> {
     const { contact, ...petData } = data;
 
     return await prisma.pets.update({
@@ -52,7 +59,7 @@ class PetRepository {
       },
     });
   }
-  async deletePet(id: string) {
+  async deletePet(id: string): Promise<DeletePet> {
     return await prisma.pets.delete({
       where: { id },
     });
