@@ -3,7 +3,7 @@ import userService from "../services/userService";
 import useSchema from "../joiSchema/useSchema";
 
 class UserController {
-  async findUser(req: Request, res: Response) {
+  async findUser(req: Request, res: Response): Promise<void> {
     try {
       const users = await userService.findUsers();
       res.status(200).json(users);
@@ -16,11 +16,12 @@ class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response): Promise<void> {
     const { error, value } = useSchema.validate(req.body);
 
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      res.status(400).json({ error: error.details[0].message });
+      return;
     }
 
     const { name, email, password } = value;
@@ -37,13 +38,14 @@ class UserController {
     }
   }
 
-  async editUser(req: Request, res: Response) {
+  async editUser(req: Request, res: Response): Promise<void> {
     const { error, value } = useSchema.validate(req.body);
     const { id } = req.params;
     const { name, email, password } = value;
 
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      res.status(400).json({ error: error.details[0].message });
+      return;
     }
 
     try {
@@ -62,7 +64,7 @@ class UserController {
     }
   }
 
-  async deleteUser(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
       await userService.deleteUser(id);

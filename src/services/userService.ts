@@ -1,16 +1,12 @@
 import userRepository from "../repositories/userRepository";
-import { UserInterface } from "../types/typeUser";
+import { CreateUser, EditUser, UserInterface } from "../types/typeUser";
 
 class UserService {
   async findUsers(): Promise<UserInterface[]> {
     return await userRepository.findAll();
   }
 
-  async createUser(userData: {
-    name: string;
-    email: string;
-    password: string;
-  }) {
+  async createUser(userData: CreateUser): Promise<UserInterface> {
     const existingUser = await userRepository.findByEmail(userData.email);
     if (existingUser) {
       throw new Error("Email already in use");
@@ -18,10 +14,7 @@ class UserService {
     return await userRepository.create(userData);
   }
 
-  async editUser(
-    id: string,
-    userData: { name?: string; email?: string; password?: string }
-  ) {
+  async editUser(id: string, userData: EditUser): Promise<UserInterface> {
     if (userData.email) {
       const emailInUse = await userRepository.findByEmail(userData.email);
       if (emailInUse && emailInUse.id !== id) {
@@ -31,7 +24,7 @@ class UserService {
     return await userRepository.update(id, userData);
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string): Promise<UserInterface> {
     return await userRepository.delete(id);
   }
 }

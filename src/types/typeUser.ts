@@ -6,3 +6,8 @@ export interface UserInterface {
   createdAt: Date;
   updateAt: Date;
 }
+
+export interface CreateUser
+  extends Omit<UserInterface, "createdAt" | "updateAt" | "id"> {}
+export interface EditUser
+  extends Omit<UserInterface, "createdAt" | "updateAt" | "id"> {}
