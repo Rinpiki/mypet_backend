@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
+import { UserInterface } from "../types/typeUser";
 const prisma = new PrismaClient();
 
 class UserRepository {
-  async findAll() {
+  async findAll(): Promise<UserInterface[]> {
     return await prisma.user.findMany();
   }
 

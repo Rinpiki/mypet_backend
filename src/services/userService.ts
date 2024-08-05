@@ -1,7 +1,8 @@
 import userRepository from "../repositories/userRepository";
+import { UserInterface } from "../types/typeUser";
 
 class UserService {
-  async findUsers() {
+  async findUsers(): Promise<UserInterface[]> {
     return await userRepository.findAll();
   }
 

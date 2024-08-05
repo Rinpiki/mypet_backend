@@ -4,7 +4,7 @@ import petService from "../services/petService";
 import petSchema from "../joiSchema/petSchema";
 
 class PetController {
-  async findPet(req: Request, res: Response) {
+  async findPet(req: Request, res: Response): Promise<void> {
     try {
       const pets = await petRepository.findAll();
       res.status(201).json(pets);
@@ -13,7 +13,7 @@ class PetController {
     }
   }
 
-  async findPetById(req: Request, res: Response) {
+  async findPetById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
       const pet = await petService.findPetById(id);
@@ -29,10 +29,11 @@ class PetController {
     }
   }
 
-  async createPet(req: Request, res: Response) {
+  async createPet(req: Request, res: Response): Promise<void> {
     const { error, value } = petSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      res.status(400).json({ error: error.details[0].message });
+      return;
     }
 
     try {
@@ -44,11 +45,12 @@ class PetController {
     }
   }
 
-  async updatedPet(req: Request, res: Response) {
+  async updatedPet(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const { error, value } = petSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      res.status(400).json({ error: error.details[0].message });
+      return;
     }
     try {
       const updatedPet = await petService.updatePet(value, id);
@@ -66,7 +68,7 @@ class PetController {
     }
   }
 
-  async deletPet(req: Request, res: Response) {
+  async deletPet(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
       const deletedPet = await petService.deletePet(id);
