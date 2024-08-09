@@ -14,6 +14,7 @@ class PetRepository {
   async findAll(): Promise<AllPets[]> {
     return await prisma.pets.findMany();
   }
+
   async findById(id: string): Promise<PetInterface | null> {
     return await prisma.pets.findUnique({
       where: { id },
@@ -22,6 +23,7 @@ class PetRepository {
       },
     });
   }
+
   async create(data: any): Promise<CreatePet> {
     return await prisma.pets.create({
       data: {
@@ -34,6 +36,7 @@ class PetRepository {
       },
     });
   }
+
   async update(data: PetInterface, id: string): Promise<UpdatePet> {
     const { contact, ...petData } = data;
 
@@ -59,6 +62,7 @@ class PetRepository {
       },
     });
   }
+
   async deletePet(id: string): Promise<DeletePet> {
     return await prisma.pets.delete({
       where: { id },
