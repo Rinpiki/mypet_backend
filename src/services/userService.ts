@@ -1,5 +1,6 @@
 import userRepository from "../repositories/userRepository";
 import { CreateUser, EditUser, UserInterface } from "../types/typeUser";
+import bcrypt from "bcrypt";
 
 class UserService {
   async findUsers(): Promise<UserInterface[]> {
@@ -11,6 +12,9 @@ class UserService {
     if (existingUser) {
       throw new Error("Email already in use");
     }
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+    userData.password = hashedPassword;
     return await userRepository.create(userData);
   }
 
