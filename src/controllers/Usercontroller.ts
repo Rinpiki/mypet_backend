@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import userService from "../services/userService";
 import useSchema from "../joiSchema/useSchema";
+import loginSchema from "../joiSchema/loginsSchema";
+import { log } from "console";
 
 class UserController {
   async findUser(req: Request, res: Response): Promise<void> {
@@ -69,6 +71,38 @@ class UserController {
     try {
       await userService.deleteUser(id);
       res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
+    }
+  }
+  async userLogin(req: Request, res: Response): Promise<void> {
+    const { error, value } = loginSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ error: error.details[0].message });
+      return;
+    }
+    try {
+      const login = await userService.login(value);
+      res.status(200).json(login);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
+    }
+  }
+
+  async userProfile(req: Request, res: Response): Promise<void> {
+    const { authorization } = req.headers;
+
+    try {
+      const profile = await userService.getProfile(authorization || "");
+      res.status(200).json(profile);
     } catch (error) {
       if (error instanceof Error) {
         res.status(400).json({ error: error.message });
