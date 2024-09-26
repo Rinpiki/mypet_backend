@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import userService from "../services/userService";
 import useSchema from "../joiSchema/useSchema";
 import loginSchema from "../joiSchema/loginsSchema";
-import { log } from "console";
 
 class UserController {
   async findUser(req: Request, res: Response): Promise<void> {
@@ -98,10 +97,9 @@ class UserController {
   }
 
   async userProfile(req: Request, res: Response): Promise<void> {
-    const { authorization } = req.headers;
-
+    const id = req.user.id;
     try {
-      const profile = await userService.getProfile(authorization || "");
+      const profile = await userService.getProfile(id ?? "");
       res.status(200).json(profile);
     } catch (error) {
       if (error instanceof Error) {

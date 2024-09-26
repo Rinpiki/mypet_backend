@@ -18,6 +18,8 @@ export interface PetInterface {
   location: string;
   description: string;
   userId: string;
+  createdAt: Date;
+  updateAt: Date;
   contact: ContactInterface[];
 }
 

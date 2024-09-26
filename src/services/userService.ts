@@ -3,6 +3,7 @@ import * as T from "../types/typeUser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import petRepository from "../repositories/petRepository";
 
 type jwtPayLoad = {
   id: string;
@@ -60,15 +61,19 @@ class UserService {
       token: token,
     };
   }
-  async getProfile(authorization: string): Promise<T.getInterface> {
-    const token = authorization.split(" ")[1];
-    const { id } = jwt.verify(token, process.env.JWT_PASS || "") as jwtPayLoad;
+  async getProfile(id: string): Promise<T.ProfileUser> {
     const user = await userRepository.findById(id);
+    const pet = await petRepository.findByIdUser(id);
     if (!user) {
-      throw new Error("user not found");
+      throw new Error("user not exist");
     }
-    const { password: _, ...userProfile } = user;
-    return userProfile;
+    if (!pet) {
+      throw new Error("pet not exist");
+    }
+    return {
+      user: user,
+      pets: pet,
+    };
   }
 }
 
