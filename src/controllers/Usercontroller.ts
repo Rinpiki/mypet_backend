@@ -28,7 +28,11 @@ class UserController {
     const { name, email, password } = value;
 
     try {
-      const user = await userService.createUser({ name, email, password });
+      const user = await userService.createUser({
+        name,
+        email,
+        password,
+      });
       res.status(201).json(user);
     } catch (error) {
       if (error instanceof Error) {

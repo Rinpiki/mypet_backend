@@ -6,7 +6,7 @@ type jwtPayLoad = {
   id: string;
 };
 
-export const authMiddleware = async (
+export const admMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -33,7 +33,9 @@ export const authMiddleware = async (
     }
 
     const { password: _, ...userProfile } = user;
-
+    if (!user.isAdmin) {
+      return res.status(404).json({ error: "Authorization token required" });
+    }
     req.user = userProfile;
     next();
   } catch (error) {

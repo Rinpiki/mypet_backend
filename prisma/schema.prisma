@@ -12,9 +12,10 @@ model User {
   name      String
   email     String   @unique
   password  String
+  isAdmin Boolean @default(false)
   pets Pets[]
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt  DateTime @updatedAt
 }
 
 model Pets {
@@ -28,9 +29,9 @@ model Pets {
   description String
   contact     Contact[] 
   userId      String
-  author      User    @relation(fields: [userId], references: [id])
+  author      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
-  updateAt    DateTime @updatedAt
+  updatedAt    DateTime @updatedAt
 }
 
 model Contact {
@@ -43,5 +44,5 @@ model Contact {
   petId     String
  author    Pets    @relation(fields: [petId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt  DateTime @updatedAt
 }

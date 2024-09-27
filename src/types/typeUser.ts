@@ -2,6 +2,7 @@ export interface UserInterface {
   id: string;
   name: string;
   email: string;
+  isAdmin?: boolean;
   password: string;
   createdAt: Date;
   updateAt: Date;
