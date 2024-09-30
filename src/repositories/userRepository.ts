@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { CreateUser, EditUser, UserInterface } from "../types/typeUser";
+import {
+  CreateUser,
+  EditUser,
+  UserInterface,
+} from "../interfaces/interfaceUser";
 const prisma = new PrismaClient();
 
 class UserRepository {

@@ -5,7 +5,7 @@ import {
   DeletePet,
   PetInterface,
   UpdatePet,
-} from "../types/typesPet";
+} from "../interfaces/interfacePet";
 
 class petService {
   async findPets(): Promise<AllPets[]> {

@@ -1,5 +1,5 @@
 import userRepository from "../repositories/userRepository";
-import * as T from "../types/typeUser";
+import * as T from "../interfaces/interfaceUser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";

@@ -6,8 +6,8 @@ import { admMiddleware } from "../middlewares/admMidldleware";
 const router = Router();
 
 // Rotas abertas
-router.post("/login", UserController.userLogin);
 router.post("/user", UserController.createUser);
+router.post("/login", UserController.userLogin);
 
 //rotas comuns protegidas
 router.use(authMiddleware);

@@ -6,7 +6,7 @@ import {
   UpdatePet,
   CreatePet,
   AllPets,
-} from "../types/typesPet";
+} from "../interfaces/interfacePet";
 
 const prisma = new PrismaClient();
 
