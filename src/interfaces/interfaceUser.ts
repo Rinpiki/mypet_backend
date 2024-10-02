@@ -5,7 +5,7 @@ export interface UserInterface {
   isAdmin?: boolean;
   password: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 }
 
 export interface loginInterface {
@@ -14,7 +14,7 @@ export interface loginInterface {
     name: string;
     email: string;
     createdAt: Date;
-    updateAt: Date;
+    updatedAt: Date;
   };
   token: string;
 }
@@ -38,11 +38,11 @@ interface Pet {
   description: string;
   userId: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 }
 
 export interface CreateUser
-  extends Omit<UserInterface, "createdAt" | "updateAt" | "id"> {}
+  extends Omit<UserInterface, "createdAt" | "updatedAt" | "id"> {}
 export interface EditUser
-  extends Omit<UserInterface, "createdAt" | "updateAt" | "id"> {}
+  extends Omit<UserInterface, "createdAt" | "updatedAt" | "id"> {}
 export interface getInterface extends Omit<UserInterface, "password"> {}

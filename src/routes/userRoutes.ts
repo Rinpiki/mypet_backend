@@ -10,10 +10,9 @@ router.post("/user", UserController.createUser);
 router.post("/login", UserController.userLogin);
 
 //rotas comuns protegidas
-router.use(authMiddleware);
-router.put("/user/:id", UserController.editUser);
-router.get("/profile", UserController.userProfile);
-router.delete("/user/:id", UserController.deleteUser);
+router.put("/user/:id", authMiddleware, UserController.editUser);
+router.get("/profile", authMiddleware, UserController.userProfile);
+router.delete("/user/:id", authMiddleware, UserController.deleteUser);
 
 //rotas de adm
 router.get("/users", admMiddleware, UserController.findUser);

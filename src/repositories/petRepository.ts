@@ -23,7 +23,7 @@ class PetRepository {
       },
     });
   }
-  async findByIdUser(id: string): Promise<PetInterface[] | null> {
+  async findPetUserId(id: string): Promise<PetInterface[] | null> {
     return await prisma.pets.findMany({
       where: { userId: id },
       include: {

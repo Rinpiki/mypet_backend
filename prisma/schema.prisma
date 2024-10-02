@@ -12,10 +12,10 @@ model User {
   name      String
   email     String   @unique
   password  String
-  isAdmin Boolean @default(false)
-  pets Pets[]
+  isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
+  pets      Pets[]
 }
 
 model Pets {
@@ -27,22 +27,22 @@ model Pets {
   tutor       String
   location    String
   description String
-  contact     Contact[] 
   userId      String
-  author      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  contact     Contact[]
+  author      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Contact {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   whatsapp  String
   instagram String?
   tiktok    String?
   facebook  String?
   x         String?
   petId     String
- author    Pets    @relation(fields: [petId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
+  author    Pets     @relation(fields: [petId], references: [id], onDelete: Cascade)
 }

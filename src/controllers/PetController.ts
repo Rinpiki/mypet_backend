@@ -13,6 +13,22 @@ class PetController {
     }
   }
 
+  async findPetsUserId(req: Request, res: Response): Promise<void> {
+    const userId = req.user.id;
+    try {
+      const pets = await petService.findPetUserId(userId ?? "");
+      res.status(200).json(pets);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Id not found") {
+          res.status(404).json({ error: error.message });
+        } else {
+          res.status(500).json({ error: "Internal server error" });
+        }
+      }
+    }
+  }
+
   async findPetById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
@@ -30,7 +46,10 @@ class PetController {
   }
 
   async createPet(req: Request, res: Response): Promise<void> {
-    const { error, value } = petSchema.validate(req.body);
+    const petData = req.body;
+    petData.userId = req.user.id;
+    const { error, value } = petSchema.validate(petData);
+
     if (error) {
       res.status(400).json({ error: error.details[0].message });
       return;
@@ -47,7 +66,9 @@ class PetController {
 
   async updatedPet(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { error, value } = petSchema.validate(req.body);
+    const petData = req.body;
+    petData.userId = req.user.id;
+    const { error, value } = petSchema.validate(petData);
     if (error) {
       res.status(400).json({ error: error.details[0].message });
       return;
@@ -69,14 +90,16 @@ class PetController {
   }
 
   async deletPet(req: Request, res: Response): Promise<void> {
+    const userId = req.user.id;
     const { id } = req.params;
+
     try {
-      const deletedPet = await petService.deletePet(id);
+      const deletedPet = await petService.deletePet(id, userId ?? "");
       res
         .status(200)
         .json({ message: "Pet deleted successfully", pet: deletedPet });
     } catch (error) {
-      res.status(500).json({ error: "Id not found" });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 }

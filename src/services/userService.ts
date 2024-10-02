@@ -63,7 +63,7 @@ class UserService {
   }
   async getProfile(id: string): Promise<T.ProfileUser> {
     const user = await userRepository.findById(id);
-    const pet = await petRepository.findByIdUser(id);
+    const pet = await petRepository.findPetUserId(id);
     if (!user) {
       throw new Error("user not exist");
     }

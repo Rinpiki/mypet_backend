@@ -4,8 +4,9 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" DATETIME NOT NULL
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
@@ -17,7 +18,11 @@ CREATE TABLE "Pets" (
     "sex" TEXT NOT NULL,
     "tutor" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    "description" TEXT NOT NULL
+    "description" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Pets_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -29,7 +34,9 @@ CREATE TABLE "Contact" (
     "facebook" TEXT,
     "x" TEXT,
     "petId" TEXT NOT NULL,
-    CONSTRAINT "Contact_petId_fkey" FOREIGN KEY ("petId") REFERENCES "Pets" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Contact_petId_fkey" FOREIGN KEY ("petId") REFERENCES "Pets" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex

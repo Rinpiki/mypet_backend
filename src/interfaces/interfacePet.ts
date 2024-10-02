@@ -19,7 +19,7 @@ export interface PetInterface {
   description: string;
   userId: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
   contact: ContactInterface[];
 }
 
@@ -34,7 +34,7 @@ export interface CreatePet {
   description: string;
   userId: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 }
 
 export interface UpdatePet extends CreatePet {}
