@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(router);
+app.use("/files", express.static("uploads/avatar"));
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {

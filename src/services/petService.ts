@@ -7,6 +7,8 @@ import {
   UpdatePet,
 } from "../interfaces/interfacePet";
 import { valid } from "joi";
+import fs from "fs";
+import path from "path";
 
 class petService {
   async findPets(): Promise<AllPets[]> {
@@ -38,6 +40,25 @@ class petService {
       throw new Error("Id not found");
     }
     return await petRepository.update(data, id);
+  }
+
+  async updateAvatar(petId: string, avatarPath: string): Promise<any> {
+    // Buscar o pet pelo ID
+    const pet = await petRepository.findById(petId);
+    if (!pet) {
+      throw new Error("Pet não encontrado");
+    }
+
+    // Excluir o avatar antigo, se existir
+    if (pet.avatar) {
+      const oldAvatarPath = path.resolve(`.${pet.avatar}`);
+      fs.unlink(oldAvatarPath, (err) => {
+        if (err) console.error("Erro ao deletar avatar antigo:", err);
+      });
+    }
+
+    // Atualizar o avatar com o novo caminho
+    return petRepository.updateAvatar(petId, avatarPath);
   }
 
   async deletePet(id: string, userId: string): Promise<DeletePet> {

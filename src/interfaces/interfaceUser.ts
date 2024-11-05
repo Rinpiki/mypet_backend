@@ -29,6 +29,7 @@ export interface ProfileUser {
 
 interface Pet {
   id: string;
+  avatar?: string | null;
   name: string;
   age: number;
   breed: string;
@@ -39,6 +40,15 @@ interface Pet {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Pictures {
+  id: String;
+  petId: String;
+  photo1?: String;
+  photo2?: String;
+  photo3?: String;
+  photo4?: String;
 }
 
 export interface CreateUser

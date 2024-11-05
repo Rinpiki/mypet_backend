@@ -2,6 +2,7 @@ import { Request, Response, response } from "express";
 import petRepository from "../repositories/petRepository";
 import petService from "../services/petService";
 import petSchema from "../joiSchema/petSchema";
+import { promises } from "dns";
 
 class PetController {
   async findPet(req: Request, res: Response): Promise<void> {
@@ -86,6 +87,24 @@ class PetController {
           res.status(500).json({ message: "Internal server error" });
         }
       }
+    }
+  }
+
+  async updateAvatar(req: Request, res: Response): Promise<any> {
+    const { petId } = req.params;
+    if (!req.file) {
+      return res.status(400).json({ error: "Arquivo de avatar não enviado" });
+    }
+    const avatarPath = `/uploads/avatars/${req.file.filename}`;
+
+    try {
+      // Chamar o serviço para atualizar o avatar
+      const updatedPet = await petService.updateAvatar(petId, avatarPath);
+      return res
+        .status(200)
+        .json({ message: "Avatar atualizado com sucesso", pet: updatedPet });
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
