@@ -68,3 +68,7 @@ coverage/
 # Ignore specific editor config
 .vscode/
 .idea/
+
+#img
+uploads/avatars/
+uploads/pics/
