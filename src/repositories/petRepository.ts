@@ -7,7 +7,6 @@ import {
   CreatePet,
   AllPets,
   Pictures,
-  UpdateAvatarResponse,
   PetAvatar,
 } from "../interfaces/interfacePet";
 

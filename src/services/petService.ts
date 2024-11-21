@@ -5,7 +5,6 @@ import {
   DeletePet,
   PetInterface,
   UpdatePet,
-  UpdateAvatarResponse,
   PetAvatar,
 } from "../interfaces/interfacePet";
 import fs from "fs";
@@ -47,15 +46,19 @@ class petService {
     // Buscar o pet pelo ID
     const pet = await petRepository.findById(petId);
     if (!pet) {
-      throw new Error("Pet não encontrado");
+      throw new Error("Pet not found");
     }
 
     // Excluir o avatar antigo, se existir
     if (pet.avatar) {
       const oldAvatarPath = path.resolve(`.${pet.avatar}`);
-      fs.unlink(oldAvatarPath, (err) => {
-        if (err) console.error("Erro ao deletar avatar antigo:", err);
-      });
+      if (fs.existsSync(oldAvatarPath)) {
+        fs.unlink(oldAvatarPath, (err) => {
+          if (err) console.error("Error when deleting old avatar:", err);
+        });
+      } else {
+        console.log("Old avatar file not found:", oldAvatarPath);
+      }
     }
 
     // Atualizar o avatar com o novo caminho
@@ -69,7 +72,7 @@ class petService {
       throw new Error("Id not foundddd");
     }
     if (pet.userId !== userId) {
-      throw new Error("sem permisao");
+      throw new Error("without permission");
     }
 
     return await petRepository.deletePet(id);

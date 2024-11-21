@@ -62,11 +62,6 @@ export interface PetAvatar {
   updatedAt: Date; // ISO Date string
 }
 
-export interface UpdateAvatarResponse {
-  message: string;
-  pet: PetAvatar;
-}
-
 export interface UpdatePet extends CreatePet {}
 export interface AllPets extends CreatePet {}
 export interface DeletePet extends CreatePet {}
