@@ -4,7 +4,7 @@ import path from "path";
 // Primeira configuração de storage para avatar
 export const firstStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, path.resolve("uploads/avatar"));
+    callback(null, path.resolve("uploads/avatars"));
   },
   filename(req, file, callback) {
     const time = new Date().getTime();

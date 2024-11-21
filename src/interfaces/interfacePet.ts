@@ -47,6 +47,25 @@ export interface Pictures {
   photo3?: string | null;
   photo4?: string | null;
 }
+export interface PetAvatar {
+  id: string;
+  avatar: string | null;
+  name: string;
+  age: number;
+  breed: string;
+  sex: string;
+  tutor: string;
+  location: string;
+  description: string;
+  userId: string;
+  createdAt: Date; // ISO Date string
+  updatedAt: Date; // ISO Date string
+}
+
+export interface UpdateAvatarResponse {
+  message: string;
+  pet: PetAvatar;
+}
 
 export interface UpdatePet extends CreatePet {}
 export interface AllPets extends CreatePet {}

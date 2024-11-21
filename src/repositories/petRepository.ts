@@ -7,6 +7,8 @@ import {
   CreatePet,
   AllPets,
   Pictures,
+  UpdateAvatarResponse,
+  PetAvatar,
 } from "../interfaces/interfacePet";
 
 const prisma = new PrismaClient();
@@ -87,7 +89,7 @@ class PetRepository {
     });
   }
 
-  async updateAvatar(id: string, avatarPath: string): Promise<any> {
+  async updateAvatar(id: string, avatarPath: string): Promise<PetAvatar> {
     return prisma.pets.update({
       where: { id },
       data: { avatar: avatarPath },

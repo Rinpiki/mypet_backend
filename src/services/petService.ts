@@ -5,8 +5,9 @@ import {
   DeletePet,
   PetInterface,
   UpdatePet,
+  UpdateAvatarResponse,
+  PetAvatar,
 } from "../interfaces/interfacePet";
-import { valid } from "joi";
 import fs from "fs";
 import path from "path";
 
@@ -42,7 +43,7 @@ class petService {
     return await petRepository.update(data, id);
   }
 
-  async updateAvatar(petId: string, avatarPath: string): Promise<any> {
+  async updateAvatar(petId: string, avatarPath: string): Promise<PetAvatar> {
     // Buscar o pet pelo ID
     const pet = await petRepository.findById(petId);
     if (!pet) {
