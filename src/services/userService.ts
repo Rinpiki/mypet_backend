@@ -93,8 +93,6 @@ class UserService {
 
     // Configurar e enviar e-mail
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmial.com",
-      port: 465,
       secure: true,
       service: "Gmail",
       auth: {
