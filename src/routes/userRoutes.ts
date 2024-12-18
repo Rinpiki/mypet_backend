@@ -8,6 +8,8 @@ const router = Router();
 // Rotas abertas
 router.post("/user", UserController.createUser);
 router.post("/login", UserController.userLogin);
+router.post("/forgot-password", UserController.userForgotPassword);
+router.post("/reset-password", UserController.userResetPassword);
 
 //rotas comuns protegidas
 router.put("/user/:id", authMiddleware, UserController.editUser);

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import petRepository from "../repositories/petRepository";
+import nodemailer from "nodemailer";
 
 type jwtPayLoad = {
   id: string;
@@ -61,6 +62,7 @@ class UserService {
       token: token,
     };
   }
+
   async getProfile(id: string): Promise<T.ProfileUser> {
     const user = await userRepository.findById(id);
     const pet = await petRepository.findPetUserId(id);
@@ -74,6 +76,55 @@ class UserService {
       user: user,
       pets: pet,
     };
+  }
+
+  async userForgotPassword(email: string): Promise<any> {
+    const user = await userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new Error("E-mail not found");
+    }
+
+    //jwt assinado e gerado
+    const jwtSecret = process.env.JWT_PASS as string;
+    const token = jwt.sign({ userId: user.id }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    // Configurar e enviar e-mail
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmial.com",
+      port: 465,
+      secure: true,
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.GMAILPASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: user.email,
+      subject: "Redefinição de senha",
+      text: `Use este link para redefinir sua senha: https://petshare.com/reset-password?token=${token}`,
+    };
+
+    return await transporter.sendMail(mailOptions);
+  }
+
+  async userResetPassword(token: string, newPassword: string): Promise<any> {
+    const jwtSecret = process.env.JWT_PASS as string;
+
+    const saltRounds = parseInt(process.env.SALTROUDS || "10", 10);
+    const decoded = jwt.verify(token, jwtSecret) as { userId: string };
+    if (!decoded) {
+      throw new Error("invalid token");
+    }
+    // Atualizar a senha do usuário
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds || 10);
+
+    return await userRepository.passwordUpdate(decoded.userId, hashedPassword);
   }
 }
 

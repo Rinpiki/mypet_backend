@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import userService from "../services/userService";
 import useSchema from "../joiSchema/useSchema";
 import loginSchema from "../joiSchema/loginsSchema";
+import forgotPasswordSchema from "../joiSchema/forgotPasswordSchema";
+import resetPasswordSchema from "../joiSchema/resetPasswordSchema";
 
 class UserController {
   async findUser(req: Request, res: Response): Promise<void> {
@@ -82,6 +84,7 @@ class UserController {
       }
     }
   }
+
   async userLogin(req: Request, res: Response): Promise<void> {
     const { error, value } = loginSchema.validate(req.body);
     if (error) {
@@ -105,6 +108,48 @@ class UserController {
     try {
       const profile = await userService.getProfile(id ?? "");
       res.status(200).json(profile);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
+    }
+  }
+
+  async userForgotPassword(req: Request, res: Response): Promise<void> {
+    const { error, value } = forgotPasswordSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ error: error.details[0].message });
+      return;
+    }
+    const { email } = value;
+
+    try {
+      const emailStatus = await userService.userForgotPassword(email);
+      res.status(201).json(emailStatus);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: "Unknown error" });
+      }
+    }
+  }
+
+  async userResetPassword(req: Request, res: Response): Promise<void> {
+    const { error, value } = resetPasswordSchema.validate(req.body);
+    const { token, newPassword } = value;
+    if (error) {
+      res.status(400).json({ error: error.details[0].message });
+      return;
+    }
+    try {
+      const passwordStatus = await userService.userResetPassword(
+        token,
+        newPassword
+      );
+      res.status(201).json(passwordStatus);
     } catch (error) {
       if (error instanceof Error) {
         res.status(400).json({ error: error.message });
