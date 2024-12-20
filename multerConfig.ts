@@ -15,7 +15,7 @@ export const firstStorage = multer.diskStorage({
 // Segunda configuração de storage para outras imagens
 export const secondStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, path.resolve("uploads/pics"));
+    callback(null, path.resolve("uploads/imagens"));
   },
   filename(req, file, callback) {
     const time = new Date().getTime();
@@ -25,6 +25,6 @@ export const secondStorage = multer.diskStorage({
 
 // Inicializando o multer com cada storage
 const uploadAvatar = multer({ storage: firstStorage });
-const uploadPics = multer({ storage: secondStorage });
+const uploadImagens = multer({ storage: secondStorage });
 
-export { uploadAvatar, uploadPics };
+export { uploadAvatar, uploadImagens };

@@ -11,6 +11,10 @@ export interface ContactInterface {
 export interface PetInterface {
   id: string;
   avatar?: string | null;
+  photo1?: string | null;
+  photo2?: string | null;
+  photo3?: string | null;
+  photo4?: string | null;
   name: string;
   age: number;
   breed: string;
@@ -22,7 +26,6 @@ export interface PetInterface {
   createdAt: Date;
   updatedAt: Date;
   contact: ContactInterface[];
-  picture: Pictures[];
 }
 
 export interface CreatePet {
@@ -39,14 +42,6 @@ export interface CreatePet {
   updatedAt: Date;
 }
 
-export interface Pictures {
-  id: string;
-  petId: String;
-  photo1?: string | null;
-  photo2?: string | null;
-  photo3?: string | null;
-  photo4?: string | null;
-}
 export interface PetAvatar {
   id: string;
   avatar: string | null;
@@ -65,3 +60,5 @@ export interface PetAvatar {
 export interface UpdatePet extends CreatePet {}
 export interface AllPets extends CreatePet {}
 export interface DeletePet extends CreatePet {}
+export interface interfaceDefult
+  extends Omit<PetInterface, "contact" | "picture"> {}

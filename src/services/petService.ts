@@ -65,6 +65,34 @@ class petService {
     return petRepository.updateAvatar(petId, avatarPath);
   }
 
+  async uploadImagens(
+    petId: string,
+    segment: string,
+    avatarPath: string
+  ): Promise<any> {
+    // Buscar o pet pelo ID
+    const pet = await petRepository.findById(petId);
+    if (!pet) {
+      throw new Error("Pet not found");
+    }
+
+    const fieldName = `photo${segment}` as keyof PetInterface;
+
+    // Excluir o avatar antigo, se existir
+    if (pet[fieldName]) {
+      const oldImagensPath = path.resolve(`.${pet[fieldName]}`);
+      if (fs.existsSync(oldImagensPath)) {
+        fs.unlink(oldImagensPath, (err) => {
+          if (err) console.error("Error when deleting old avatar:", err);
+        });
+      } else {
+        console.log("Old avatar file not found:", oldImagensPath);
+      }
+    }
+
+    return petRepository.uploadImagens(petId, segment, avatarPath);
+  }
+
   async deletePet(id: string, userId: string): Promise<DeletePet> {
     const pet = await petRepository.findById(id);
 

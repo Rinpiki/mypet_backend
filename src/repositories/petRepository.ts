@@ -6,7 +6,6 @@ import {
   UpdatePet,
   CreatePet,
   AllPets,
-  Pictures,
   PetAvatar,
 } from "../interfaces/interfacePet";
 
@@ -22,7 +21,6 @@ class PetRepository {
       where: { id },
       include: {
         contact: true,
-        picture: true,
       },
     });
   }
@@ -31,7 +29,6 @@ class PetRepository {
       where: { userId: id },
       include: {
         contact: true,
-        picture: true,
       },
     });
   }
@@ -50,7 +47,7 @@ class PetRepository {
   }
 
   async update(data: PetInterface, id: string): Promise<UpdatePet> {
-    const { contact, picture, ...petData } = data;
+    const { contact, ...petData } = data;
 
     return await prisma.pets.update({
       where: { id },
@@ -68,22 +65,9 @@ class PetRepository {
               }))
             : [], // Cria novos contatos
         },
-        picture: {
-          deleteMany: {}, // Se você deseja deletar todas as fotos antes de adicionar novas, use isso
-          create: picture // Supondo que você tenha uma lista de novas fotos para adicionar
-            ? picture.map((p: Pictures) => ({
-                photo1: p.photo1,
-                photo2: p.photo2,
-                photo3: p.photo3,
-                photo4: p.photo4,
-                petId: id, // Certifique-se de associar a foto ao pet correto
-              }))
-            : [], // Se não houver novas fotos, não cria nenhuma
-        },
       },
       include: {
         contact: true, // Inclui os contatos atualizados na resposta
-        picture: true, // Inclui as fotos atualizadas na resposta
       },
     });
   }
@@ -92,6 +76,18 @@ class PetRepository {
     return prisma.pets.update({
       where: { id },
       data: { avatar: avatarPath },
+    });
+  }
+  async uploadImagens(
+    id: string,
+    segment: string,
+    avatarPath: string
+  ): Promise<PetAvatar> {
+    const fieldName = `photo${segment}`;
+
+    return prisma.pets.update({
+      where: { id },
+      data: { [fieldName]: avatarPath },
     });
   }
 

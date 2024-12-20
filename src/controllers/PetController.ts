@@ -108,6 +108,27 @@ class PetController {
     }
   }
 
+  async uploadImagens(req: Request, res: Response): Promise<void> {
+    const { segment, petId } = req.params;
+
+    if (!req.file) {
+      res.status(400).json({ error: "Arquivo de avatar não enviado" });
+      return;
+    }
+    const avatarPath = `/uploads/imagens/${req.file?.filename}`;
+    try {
+      // Chamar o serviço para postar imagens
+      const updatedPet = await petService.uploadImagens(
+        petId,
+        segment,
+        avatarPath
+      );
+      res.status(200).json({ message: "imagem postada", pet: updatedPet });
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   async deletPet(req: Request, res: Response): Promise<void> {
     const userId = req.user.id;
     const { id } = req.params;
