@@ -92,10 +92,13 @@ class PetController {
 
   async updateAvatar(req: Request, res: Response): Promise<void> {
     const { petId } = req.params;
+
     if (!req.file) {
       res.status(400).json({ error: "Arquivo de avatar não enviado" });
+      return;
     }
-    const avatarPath = `/uploads/avatars/${req.file?.filename}`;
+
+    const avatarPath = `/uploads/avatars/${req.file.filename}`;
 
     try {
       // Chamar o serviço para atualizar o avatar
@@ -104,7 +107,11 @@ class PetController {
         .status(200)
         .json({ message: "Avatar atualizado com sucesso", pet: updatedPet });
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Internal server error" });
+      }
     }
   }
 
@@ -115,6 +122,7 @@ class PetController {
       res.status(400).json({ error: "Arquivo de avatar não enviado" });
       return;
     }
+
     const avatarPath = `/uploads/imagens/${req.file?.filename}`;
     try {
       // Chamar o serviço para postar imagens
@@ -125,7 +133,11 @@ class PetController {
       );
       res.status(200).json({ message: "imagem postada", pet: updatedPet });
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Internal server error" });
+      }
     }
   }
 

@@ -70,13 +70,12 @@ class petService {
     segment: string,
     avatarPath: string
   ): Promise<any> {
+    const fieldName = `photo${segment}` as keyof PetInterface;
     // Buscar o pet pelo ID
     const pet = await petRepository.findById(petId);
     if (!pet) {
       throw new Error("Pet not found");
     }
-
-    const fieldName = `photo${segment}` as keyof PetInterface;
 
     // Excluir o avatar antigo, se existir
     if (pet[fieldName]) {
@@ -97,10 +96,24 @@ class petService {
     const pet = await petRepository.findById(id);
 
     if (!pet) {
-      throw new Error("Id not foundddd");
+      throw new Error("Id not found");
     }
     if (pet.userId !== userId) {
       throw new Error("without permission");
+    }
+    const { avatar, photo1, photo2, photo3, photo4 } = pet;
+    const petPhotos = [avatar, photo1, photo2, photo3, photo4];
+    for (const photo of petPhotos) {
+      if (!photo) continue;
+      console.log(photo);
+      const oldImagensPath = path.resolve(`.${photo}`);
+      if (fs.existsSync(oldImagensPath)) {
+        fs.unlink(oldImagensPath, (err) => {
+          if (err) console.error("Error when deleting old avatar:", err);
+        });
+      } else {
+        console.log("Old avatar file not found:", oldImagensPath);
+      }
     }
 
     return await petRepository.deletePet(id);

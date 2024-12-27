@@ -3,6 +3,7 @@ import PetController from "../controllers/PetController";
 import { admMiddleware } from "../middlewares/admMidldleware";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { uploadAvatar, uploadImagens } from "../../multerConfig";
+import { authUploadsMiddleware } from "../middlewares/authUploadsMiddleware";
 
 const router = Router();
 
@@ -13,13 +14,13 @@ router.put("/pet/:id", authMiddleware, PetController.updatedPet);
 router.delete("/pet/:id", authMiddleware, PetController.deletPet);
 router.put(
   "/pets/avatar/:petId",
-  authMiddleware,
+  authUploadsMiddleware,
   uploadAvatar.single("avatar"),
   PetController.updateAvatar
 );
 router.post(
   "/pets/imagens/:segment/:petId",
-  authMiddleware,
+  authUploadsMiddleware,
   uploadImagens.single("imagens"),
   PetController.uploadImagens
 );
