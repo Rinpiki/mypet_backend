@@ -24,7 +24,7 @@ class petService {
 
   async findPetUserId(id: string): Promise<PetInterface[] | null> {
     const existPet = await petRepository.findPetUserId(id);
-    if (existPet === null) {
+    if (!existPet || existPet.length === 0) {
       throw new Error("Id not found");
     }
     return await petRepository.findPetUserId(id);
@@ -105,7 +105,6 @@ class petService {
     const petPhotos = [avatar, photo1, photo2, photo3, photo4];
     for (const photo of petPhotos) {
       if (!photo) continue;
-      console.log(photo);
       const oldImagensPath = path.resolve(`.${photo}`);
       if (fs.existsSync(oldImagensPath)) {
         fs.unlink(oldImagensPath, (err) => {
@@ -117,6 +116,47 @@ class petService {
     }
 
     return await petRepository.deletePet(id);
+  }
+
+  async deleteImages(pathImage: string, idUser: string): Promise<any> {
+    const pet = await petRepository.findByImagePath(pathImage);
+    if (!pet) {
+      throw new Error("image not exist");
+    }
+
+    if (pet.userId !== idUser) {
+      throw new Error("without permission");
+    }
+
+    function getKeyByValue(
+      obj: Record<string, any>,
+      value: string
+    ): string | null {
+      // Itera sobre as chaves do objeto
+      for (const key in obj) {
+        if (obj[key] === value) {
+          return key; // Retorna a chave correspondente ao valor
+        }
+      }
+      return null; // Retorna null se o valor não for encontrado
+    }
+
+    const key = getKeyByValue(pet, pathImage);
+    console.log(key);
+
+    if (!key) {
+      throw new Error("key not exist");
+    }
+    const oldImagensPath = path.resolve(`.${pathImage}`);
+    console.log(oldImagensPath);
+    if (fs.existsSync(oldImagensPath)) {
+      fs.unlink(oldImagensPath, (err) => {
+        if (err) console.error("Error when deleting old avatar:", err);
+      });
+    } else {
+      console.log("Old avatar file not found:", oldImagensPath);
+    }
+    return await petRepository.deleteImage(pet.id, key);
   }
 }
 

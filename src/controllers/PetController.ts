@@ -2,7 +2,6 @@ import { Request, Response, response } from "express";
 import petRepository from "../repositories/petRepository";
 import petService from "../services/petService";
 import petSchema from "../joiSchema/petSchema";
-import { promises } from "dns";
 
 class PetController {
   async findPet(req: Request, res: Response): Promise<void> {
@@ -15,9 +14,9 @@ class PetController {
   }
 
   async findPetsUserId(req: Request, res: Response): Promise<void> {
-    const userId = req.user.id;
+    const userId = req.params;
     try {
-      const pets = await petService.findPetUserId(userId ?? "");
+      const pets = await petService.findPetUserId(userId.userid);
       res.status(200).json(pets);
     } catch (error) {
       if (error instanceof Error) {
@@ -141,7 +140,7 @@ class PetController {
     }
   }
 
-  async deletPet(req: Request, res: Response): Promise<void> {
+  async deletePet(req: Request, res: Response): Promise<void> {
     const userId = req.user.id;
     const { id } = req.params;
 
@@ -151,7 +150,31 @@ class PetController {
         .status(200)
         .json({ message: "Pet deleted successfully", pet: deletedPet });
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
+  }
+
+  async deleteImages(req: Request, res: Response): Promise<void> {
+    const { imagePath } = req.body;
+    const idUser = req.user.id;
+
+    if (!idUser) {
+      res.status(400).json({ error: "without permission" });
+      return;
+    }
+    try {
+      const result = await petService.deleteImages(imagePath, idUser);
+      res.status(201).json(result);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Internal server error" });
+      }
     }
   }
 }

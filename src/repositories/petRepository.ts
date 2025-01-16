@@ -24,6 +24,24 @@ class PetRepository {
       },
     });
   }
+
+  async findByImagePath(imagePath: string): Promise<any> {
+    return await prisma.pets.findFirst({
+      where: {
+        OR: [
+          { avatar: imagePath },
+          { photo1: imagePath },
+          { photo2: imagePath },
+          { photo3: imagePath },
+          { photo4: imagePath },
+        ],
+      },
+      include: {
+        contact: true,
+      },
+    });
+  }
+
   async findPetUserId(id: string): Promise<PetInterface[] | null> {
     return await prisma.pets.findMany({
       where: { userId: id },
@@ -76,6 +94,12 @@ class PetRepository {
     return prisma.pets.update({
       where: { id },
       data: { avatar: avatarPath },
+    });
+  }
+  async deleteImage(id: string, imagePath: string): Promise<any> {
+    return prisma.pets.update({
+      where: { id },
+      data: { [imagePath]: "" },
     });
   }
   async uploadImagens(

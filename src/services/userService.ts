@@ -5,10 +5,8 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import petRepository from "../repositories/petRepository";
 import nodemailer from "nodemailer";
-
-type jwtPayLoad = {
-  id: string;
-};
+import { deletePet } from "../utils/deletePet";
+import petService from "./petService";
 
 const saltRounds = parseInt(process.env.SALTROUDS || "");
 
@@ -38,8 +36,15 @@ class UserService {
     return await userRepository.update(id, userData);
   }
 
-  async deleteUser(id: string): Promise<T.UserInterface> {
-    return await userRepository.delete(id);
+  async deleteUser(id: string): Promise<object> {
+    const user = await userRepository.findById(id);
+    const userPets = await petRepository.findPetUserId(id);
+
+    if (!user) {
+      throw new Error("user not found");
+    }
+
+    return await deletePet(id, userPets);
   }
 
   async login(userData: T.CreateUser): Promise<T.loginInterface> {

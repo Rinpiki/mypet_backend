@@ -11,7 +11,7 @@ const router = Router();
 router.get("/mypets", authMiddleware, PetController.findPetsUserId);
 router.post("/pet", authMiddleware, PetController.createPet);
 router.put("/pet/:id", authMiddleware, PetController.updatedPet);
-router.delete("/pet/:id", authMiddleware, PetController.deletPet);
+router.delete("/pet/:id", authMiddleware, PetController.deletePet);
 router.put(
   "/pets/avatar/:petId",
   authUploadsMiddleware,
@@ -24,9 +24,11 @@ router.post(
   uploadImagens.single("imagens"),
   PetController.uploadImagens
 );
+router.get("/images", authMiddleware, PetController.deleteImages);
 
 //rotas de adm
 router.get("/pets", admMiddleware, PetController.findPet);
 router.get("/pet/:id", admMiddleware, PetController.findPetById);
+router.get("/pets/:userid", admMiddleware, PetController.findPetsUserId);
 
 export default router;
