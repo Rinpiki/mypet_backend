@@ -16,7 +16,6 @@ export const deletePet = async (id: string, userId: PetInterface[] | null) => {
   if (!userId || userId?.length === 0) {
     return await userRepository.delete(id);
   }
-  console.log(userId);
   const filteredArray = userId.map((item) =>
     Object.fromEntries(
       Object.entries(item).filter(([key]) => keysToFilter.includes(key))
@@ -30,7 +29,6 @@ export const deletePet = async (id: string, userId: PetInterface[] | null) => {
   for (const photo of petPhotos) {
     if (!photo) continue;
     const oldImagensPath = path.resolve(`.${photo}`);
-    console.log(oldImagensPath);
     if (fs.existsSync(oldImagensPath)) {
       fs.unlink(oldImagensPath, (err) => {
         if (err) console.error("Error when deleting old avatar:", err);

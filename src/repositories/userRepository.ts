@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   CreateUser,
   EditUser,
+  ForgotPasswordApiResponse,
   UserInterface,
 } from "../interfaces/interfaceUser";
 const prisma = new PrismaClient();
@@ -38,7 +39,10 @@ class UserRepository {
     return await prisma.user.delete({ where: { id } });
   }
 
-  async passwordUpdate(userId: string, hashedPassword: string): Promise<any> {
+  async passwordUpdate(
+    userId: string,
+    hashedPassword: string
+  ): Promise<ForgotPasswordApiResponse> {
     return await prisma.user.update({
       where: { id: userId },
       data: { password: hashedPassword },

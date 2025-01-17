@@ -4,9 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import petRepository from "../repositories/petRepository";
-import nodemailer from "nodemailer";
+import nodemailer, { SentMessageInfo } from "nodemailer";
 import { deletePet } from "../utils/deletePet";
-import petService from "./petService";
+import { ForgotPasswordApiResponse } from "../interfaces/interfaceUser";
 
 const saltRounds = parseInt(process.env.SALTROUDS || "");
 
@@ -83,7 +83,7 @@ class UserService {
     };
   }
 
-  async userForgotPassword(email: string): Promise<any> {
+  async userForgotPassword(email: string): Promise<SentMessageInfo> {
     const user = await userRepository.findByEmail(email);
 
     if (!user) {
@@ -116,7 +116,10 @@ class UserService {
     return await transporter.sendMail(mailOptions);
   }
 
-  async userResetPassword(token: string, newPassword: string): Promise<any> {
+  async userResetPassword(
+    token: string,
+    newPassword: string
+  ): Promise<ForgotPasswordApiResponse> {
     const jwtSecret = process.env.JWT_PASS as string;
 
     const saltRounds = parseInt(process.env.SALTROUDS || "10", 10);

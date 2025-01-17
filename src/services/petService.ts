@@ -1,4 +1,5 @@
 import petRepository from "../repositories/petRepository";
+import { getKeyByValue } from "./../utils/getKeyByValue";
 import {
   AllPets,
   CreatePet,
@@ -69,7 +70,7 @@ class petService {
     petId: string,
     segment: string,
     avatarPath: string
-  ): Promise<any> {
+  ): Promise<PetAvatar> {
     const fieldName = `photo${segment}` as keyof PetInterface;
     // Buscar o pet pelo ID
     const pet = await petRepository.findById(petId);
@@ -118,7 +119,7 @@ class petService {
     return await petRepository.deletePet(id);
   }
 
-  async deleteImages(pathImage: string, idUser: string): Promise<any> {
+  async deleteImages(pathImage: string, idUser: string): Promise<UpdatePet> {
     const pet = await petRepository.findByImagePath(pathImage);
     if (!pet) {
       throw new Error("image not exist");
@@ -128,27 +129,12 @@ class petService {
       throw new Error("without permission");
     }
 
-    function getKeyByValue(
-      obj: Record<string, any>,
-      value: string
-    ): string | null {
-      // Itera sobre as chaves do objeto
-      for (const key in obj) {
-        if (obj[key] === value) {
-          return key; // Retorna a chave correspondente ao valor
-        }
-      }
-      return null; // Retorna null se o valor não for encontrado
-    }
-
     const key = getKeyByValue(pet, pathImage);
-    console.log(key);
 
     if (!key) {
       throw new Error("key not exist");
     }
     const oldImagensPath = path.resolve(`.${pathImage}`);
-    console.log(oldImagensPath);
     if (fs.existsSync(oldImagensPath)) {
       fs.unlink(oldImagensPath, (err) => {
         if (err) console.error("Error when deleting old avatar:", err);

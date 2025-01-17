@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+
 import {
   PetInterface,
   ContactInterface,
@@ -25,7 +26,7 @@ class PetRepository {
     });
   }
 
-  async findByImagePath(imagePath: string): Promise<any> {
+  async findByImagePath(imagePath: string): Promise<PetInterface | null> {
     return await prisma.pets.findFirst({
       where: {
         OR: [
@@ -96,7 +97,7 @@ class PetRepository {
       data: { avatar: avatarPath },
     });
   }
-  async deleteImage(id: string, imagePath: string): Promise<any> {
+  async deleteImage(id: string, imagePath: string): Promise<UpdatePet> {
     return prisma.pets.update({
       where: { id },
       data: { [imagePath]: "" },
