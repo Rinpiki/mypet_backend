@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "build": "npx tsc && cp -r src/uploads build/",
+    "build": "npx tsc && mkdir build\\uploads && mkdir build\\uploads\\avatars && mkdir build\\uploads\\imagens",
     "dev": "nodemon src/server.ts",
     "start": "node build/server.js"
   },
