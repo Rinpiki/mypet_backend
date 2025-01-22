@@ -25,13 +25,13 @@
     "multer": "1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "prisma": "^5.14.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/multer": "^1.4.12",
     "nodemon": "^3.1.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.5"
   }
 }
