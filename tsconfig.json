@@ -5,6 +5,7 @@
     "target": "es2016",
     "module": "commonjs",
     "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "types": ["express"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
