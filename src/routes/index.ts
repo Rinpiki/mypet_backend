@@ -2,7 +2,7 @@ import { Router } from "express";
 import userRoutes from "./userRoutes";
 import petRoutes from "./petRoutes";
 
-const router = Router();
+const router: Router = Router();
 
 // Usando as rotas separadas
 router.use(userRoutes);
