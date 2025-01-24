@@ -47,7 +47,7 @@ class PetController {
 
   async createPet(req: Request, res: Response): Promise<void> {
     const petData = req.body;
-    petData.userId = req.user.id;
+    petData.userId = req.user?.id;
     const { error, value } = petSchema.validate(petData);
 
     if (error) {
@@ -67,7 +67,7 @@ class PetController {
   async updatedPet(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const petData = req.body;
-    petData.userId = req.user.id;
+    petData.userId = req.user?.id;
     const { error, value } = petSchema.validate(petData);
     if (error) {
       res.status(400).json({ error: error.details[0].message });
@@ -141,7 +141,7 @@ class PetController {
   }
 
   async deletePet(req: Request, res: Response): Promise<void> {
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const { id } = req.params;
 
     try {
@@ -160,7 +160,7 @@ class PetController {
 
   async deleteImages(req: Request, res: Response): Promise<void> {
     const { imagePath } = req.body;
-    const idUser = req.user.id;
+    const idUser = req.user?.id;
 
     if (!idUser) {
       res.status(400).json({ error: "without permission" });

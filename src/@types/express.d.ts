@@ -7,4 +7,3 @@ declare global {
     }
   }
 }
-const a = 1;
