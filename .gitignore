@@ -50,9 +50,6 @@ prisma/.env
 # TypeScript cache
 *.tsbuildinfo
 
-# Ignore TypeScript declaration files
-*.d.ts
-
 # Ignore any test coverage reports
 coverage/
 
