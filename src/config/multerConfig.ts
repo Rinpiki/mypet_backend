@@ -14,12 +14,16 @@ const isProduction = __dirname.includes("build");
 
 // Define o caminho base correto
 const basePath = isProduction
-  ? path.resolve(__dirname, "..", "uploads") // Em produção, usa "build/uploads"
-  : path.resolve(__dirname, "uploads"); // Em desenvolvimento, usa "src/uploads"
+  ? path.resolve(__dirname, "..", "uploads") // Em produção, supõe que a estrutura seja: build/../uploads
+  : path.resolve(__dirname, "uploads"); // Em desenvolvimento, supõe uploads dentro do diretório atual
 
 // Caminhos para armazenar os arquivos
 const avatarPath = path.resolve(basePath, "avatars");
 const imagensPath = path.resolve(basePath, "imagens");
+
+// Cria os diretórios, se não existirem
+ensureDirectoryExists(avatarPath);
+ensureDirectoryExists(imagensPath);
 
 // Primeira configuração de storage para avatar
 export const firstStorage = multer.diskStorage({
