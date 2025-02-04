@@ -9,13 +9,17 @@ function ensureDirectoryExists(dir: string) {
   }
 }
 
-// Caminhos das pastas
-const avatarPath = path.resolve("src/uploads/avatars");
-const imagensPath = path.resolve("src/uploads/imagens");
+// Verifica se o código está rodando dentro de "build"
+const isProduction = __dirname.includes("build");
 
-// Garante que as pastas existam
-ensureDirectoryExists(avatarPath);
-ensureDirectoryExists(imagensPath);
+// Define o caminho base correto
+const basePath = isProduction
+  ? path.resolve(__dirname, "..", "uploads") // Em produção, usa "build/uploads"
+  : path.resolve(__dirname, "uploads"); // Em desenvolvimento, usa "src/uploads"
+
+// Caminhos para armazenar os arquivos
+const avatarPath = path.resolve(basePath, "avatars");
+const imagensPath = path.resolve(basePath, "imagens");
 
 // Primeira configuração de storage para avatar
 export const firstStorage = multer.diskStorage({
