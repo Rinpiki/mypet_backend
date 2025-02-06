@@ -3,7 +3,7 @@ import UserController from "../controllers/UserController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { admMiddleware } from "../middlewares/admMidldleware";
 
-const router = Router();
+const router: Router = Router();
 
 // Rotas abertas
 router.post("/user", UserController.createUser);

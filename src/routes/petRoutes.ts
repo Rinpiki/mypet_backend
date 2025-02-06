@@ -2,10 +2,10 @@ import { Router } from "express";
 import PetController from "../controllers/PetController";
 import { admMiddleware } from "../middlewares/admMidldleware";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { uploadAvatar, uploadImagens } from "../../multerConfig";
+import { uploadAvatar, uploadImagens } from "../config/multerConfig";
 import { authUploadsMiddleware } from "../middlewares/authUploadsMiddleware";
 
-const router = Router();
+const router: Router = Router();
 
 //Rotas de pets protegidas
 router.get("/mypets", authMiddleware, PetController.findPetsUserId);

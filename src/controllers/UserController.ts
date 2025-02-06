@@ -104,7 +104,7 @@ class UserController {
   }
 
   async userProfile(req: Request, res: Response): Promise<void> {
-    const id = req.user.id;
+    const id = req.user?.id;
     try {
       const profile = await userService.getProfile(id ?? "");
       res.status(200).json(profile);

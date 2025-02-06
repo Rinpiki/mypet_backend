@@ -2,10 +2,11 @@
   "name": "mypet_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "build": "npx tsc",
-    "dev": "nodemon  src/server.ts",
+    "build": "npx tsc && mkdir build\\uploads && mkdir build\\uploads\\avatars && mkdir build\\uploads\\imagens",
+    "dbuild": "npx tsc && mkdir -p build/uploads/avatars build/uploads/imagens",
+    "dev": "nodemon src/server.ts",
     "start": "node build/server.js"
   },
   "keywords": [],
@@ -13,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.14.0",
-    "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.12",
     "@types/nodemailer": "^6.4.17",
@@ -25,13 +25,14 @@
     "multer": "1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "prisma": "^5.14.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
     "@types/multer": "^1.4.12",
     "nodemon": "^3.1.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.5"
   }
 }
